@@ -112,6 +112,25 @@ if __name__=="__main__":
     print(train["B12"].value_counts())
     print(test["B12"].value_counts())
 
+    sub_object = pd.DataFrame()
+    sub_noobject = pd.DataFrame()
+    sub_object['id'] = train['样本id'].apply(lambda x: x.split('_')[1]).sort_values()
+    train['id'] = sub_object['id'].copy()
+    sub_noobject['id'] = sub_object['id'].copy()
+    train = train.sort_values(by='id')
+    train = train.rename(columns={'收率': 'yield'})
+    del train['id']
+    del train['样本id']
+    for col in train.columns:
+        if train[col].dtype == 'object' and col != 'A25':
+            sub_object[col] = train[col]
+
+        else:
+            sub_noobject[col] = train[col]
+
+    sub_object.to_csv('object.csv', index=False)
+    sub_noobject.to_csv('noobject.csv', index=False)
+
 
 
 
