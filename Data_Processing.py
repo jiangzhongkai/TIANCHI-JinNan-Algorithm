@@ -291,8 +291,16 @@ def get_gap_between_time(t1,t2):
     else:
         return -1
 
-def punction_process(t):
-    pass
+def get_feat_diff(data, column="B12"):
+    data["id"] = data["样本id"]
+    data = data.sort_values(by="id")
+    del data["样本id"]
+    temp = []
+    for i in range(0, len(data[column]) - 1, 1):
+        temp.append(abs(data[column].values[i + 1] - data[column].values[i]))
+    temp.append(0)
+    data[column + "diff"] = temp
+    return data[column + "diff"]
 
 if __name__=="__main__":
     train = pd.read_csv('Data/jinnan_round1_train_20181227.csv', encoding='gb18030')
